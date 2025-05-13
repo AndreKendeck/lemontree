@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Product::class);
             $table->unsignedBigInteger('price');
             $table->float('quantity', 8, 2); // this represents Kg
+            $table->date('delivery_date');
             $table->timestamps();
         });
     }

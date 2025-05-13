@@ -43,9 +43,9 @@ enum PurchaseOrderStatus: string implements JsonSerializable
 
     public function jsonSerialize(): mixed
     {
-        return json_encode([
+        return [
             'label' => $this->getLabel(),
             'value' => $this->value
-        ]);
+        ];
     }
 }

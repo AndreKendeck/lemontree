@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\PurchaseOrderType;
+use App\Enums\RoleType;
 use App\Models\PurchaseOrder;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -13,7 +15,7 @@ class PurchaseOrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->role, RoleType::getAdminRoles());
     }
 
     /**
@@ -21,7 +23,10 @@ class PurchaseOrderPolicy
      */
     public function view(User $user, PurchaseOrder $purchaseOrder): bool
     {
-        return false;
+        if ($user->role === RoleType::SALES_ASSOCIATE) {
+            return $purchaseOrder->type === PurchaseOrderType::SUPPLIER;
+        }
+        return in_array($user->role, RoleType::getAdminRoles());
     }
 
     /**
@@ -29,7 +34,7 @@ class PurchaseOrderPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, RoleType::getAdminRoles());
     }
 
     /**
@@ -37,7 +42,7 @@ class PurchaseOrderPolicy
      */
     public function update(User $user, PurchaseOrder $purchaseOrder): bool
     {
-        return false;
+        return in_array($user->role, RoleType::getAdminRoles());
     }
 
     /**
@@ -45,22 +50,6 @@ class PurchaseOrderPolicy
      */
     public function delete(User $user, PurchaseOrder $purchaseOrder): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, PurchaseOrder $purchaseOrder): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, PurchaseOrder $purchaseOrder): bool
-    {
-        return false;
+        return $user->role === RoleType::SYSTEM_ADMINISTRATOR;
     }
 }

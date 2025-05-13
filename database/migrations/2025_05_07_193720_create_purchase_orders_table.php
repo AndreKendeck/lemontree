@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id')->index();
+            $table->string('type');
             $table->foreignIdFor(Client::class, 'client_id')->index();
             $table->string('status');
             $table->timestamps();

@@ -3,12 +3,22 @@
 namespace App\Enums;
 
 use JsonSerializable;
+use PDO;
 
 enum RoleType: string implements JsonSerializable
 {
     case SYSTEM_ADMINISTRATOR = 'system_administrator';
     case PURCHASE_MANAGER = 'purchase_manager';
     case SALES_ASSOCIATE = 'sales_associate';
+
+
+    public static function getAdminRoles(): array
+    {
+        return [
+            self::SYSTEM_ADMINISTRATOR,
+            self::PURCHASE_MANAGER
+        ];
+    }
 
     public function getLabel(): string
     {
@@ -28,12 +38,12 @@ enum RoleType: string implements JsonSerializable
         };
     }
 
-    public function jsonSerialize(): string
+    public function jsonSerialize(): mixed
     {
-        return json_encode([
+        return [
             'value' => $this->value,
             'label' => $this->getLabel(),
             'description' => $this->getDescription(),
-        ]);
+        ];
     }
 }
