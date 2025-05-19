@@ -38,16 +38,12 @@ class PurchaseOrder extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'purchase_order_products')
-            ->using(PurchaseOrderProduct::class)
-            ->withPivotValue([
-                'quantity',
-                'price'
-            ]);
+            ->using(PurchaseOrderProduct::class);
     }
 
     public function addProduct(Product $product, float $quantity, DateTimeInterface $deliveryDate)
     {
-        $this->products()->attach($product, [
+        $this->products()->attach([$product->id], [
             'quantity' => $quantity,
             'price' => $product->currentPrice->price,
             'delivery_date' => $deliveryDate->format('Y-m-d')

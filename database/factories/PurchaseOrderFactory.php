@@ -32,19 +32,19 @@ class PurchaseOrderFactory extends Factory
                 };
             }),
             'status' => PurchaseOrderStatus::NEW,
-            'created_at' => fake()->dateTimeBetween(['01/01/2023', '31/12/2025']),
+            'created_at' => fake()->dateTimeBetween('2023-01-01', '2025-12-31'),
         ];
     }
 
     public function configure()
     {
-        $this->afterCreating(function (PurchaseOrder $purchaseOrder) {
-            $products = Product::factory()
-                ->createMany(3);
-            $products->each(function (Product $product) use ($purchaseOrder) {
-                $deliveryDate = fake()->dateTimeBetween($purchaseOrder->created_at->addWeek(), $purchaseOrder->created_at->addWeeks(24));
-                $purchaseOrder->addProduct($product, fake()->randomFloat(2, 1, 50), $deliveryDate);
-            });
+        return $this->afterCreating(function (PurchaseOrder $purchaseOrder) {
+            Product::factory()
+                ->createMany(3)
+                ->each(function (Product $product) use ($purchaseOrder) {
+                    $deliveryDate = fake()->dateTimeBetween($purchaseOrder->created_at->addWeek()->toDateString(), $purchaseOrder->created_at->addWeeks(24)->toDateString());
+                    $purchaseOrder->addProduct($product, fake()->randomFloat(2, 1, 50), $deliveryDate);
+                });
         });
     }
 }

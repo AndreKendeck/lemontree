@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePurchaseOrderRequest;
 use App\Http\Requests\UpdatePurchaseOrderRequest;
 use App\Models\PurchaseOrder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PurchaseOrderController
 {
@@ -13,7 +14,15 @@ class PurchaseOrderController
      */
     public function index()
     {
-        //
+        return PurchaseOrder::with([
+            'products' => function (BelongsToMany $products) {
+                $products->withPivot([
+                    'price',
+                    'quantity',
+                    'delivery_date'
+                ]);
+            }
+        ])->paginate();
     }
 
     /**
@@ -29,7 +38,10 @@ class PurchaseOrderController
      */
     public function store(StorePurchaseOrderRequest $request)
     {
-        //
+        return response()->json(
+            PurchaseOrder::factory()->create(),
+            201
+        );
     }
 
     /**
@@ -37,7 +49,7 @@ class PurchaseOrderController
      */
     public function show(PurchaseOrder $purchaseOrder)
     {
-        //
+        return response()->json($purchaseOrder);
     }
 
     /**

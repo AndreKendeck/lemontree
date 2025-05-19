@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('vat_number');
             $table->json('primary_sales_contact');
-            $table->json('secondary_sales_contact');
+            $table->json('primary_logistics_contact');
             $table->timestamps();
         });
     }

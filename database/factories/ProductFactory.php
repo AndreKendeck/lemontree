@@ -41,10 +41,10 @@ class ProductFactory extends Factory
 
     public function configure()
     {
-        return $this->afterCreating(function (Product $product) {
+       return $this->afterCreating(function (Product $product) {
             ProductPrice::factory()
-                ->for($product)
                 ->count(3)
+                ->for($product)
                 ->sequence(fn(Sequence $sequence) => ['year' => now()->year - $sequence->index])
                 ->create();
         });
